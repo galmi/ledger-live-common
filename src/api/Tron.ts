@@ -192,7 +192,8 @@ export async function fetchTronAccountTxs(
 ): Promise<TrongridTxInfo[]> {
   const getTxs = async (url: string) =>
     fetch(url).then((resp) => {
-      const nextUrl = get(resp, "meta.links.next");
+      const nextMetaLink = get(resp, "meta.links.next");
+      const nextUrl = (new URL(nextMetaLink, getBaseApiUrl())).toString();
       const resultsWithTxInfo = promiseAllBatched(
         3,
         resp.data || [],
